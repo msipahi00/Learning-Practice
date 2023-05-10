@@ -87,8 +87,8 @@ def portfolio_returns(market, tickers, weights, daily_returns, rf):
 
 if __name__ == '__main__':
 
-    stocks_df = pd.read_csv('/Users/marksipahimalani/Desktop/Learning-Practice/stock.csv')
-    stock_df = stocks_df.sort_values(by = ['Date'])
+    stock_df = pd.read_csv('/Users/marksipahimalani/Desktop/Learning-Practice/UdemyPythonMLAppsFinance/stock.csv')
+    stock_df = stock_df.sort_values(by = ['Date'])
     daily_r = calc_daily(stock_df)
     portfolio_returns('sp500', ['AMZN', 'AAPL', 'BA', 'T', 'MGM', 'IBM'], 1/6 * np.ones(6), daily_r, 0)
 
