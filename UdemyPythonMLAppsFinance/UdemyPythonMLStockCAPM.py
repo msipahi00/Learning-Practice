@@ -24,6 +24,13 @@ def interactive_plot(df, title):
         fig.add_scatter(x = df['Date'], y = df[i], name = i)
     fig.show()
 
+def show_plot(df, title):
+    plt.figure(figsize=(13, 5))
+    plt.plot(df, linewidth = 3)
+    plt.title(title)
+    plt.grid()
+    plt.show()
+
 #function to calculate daily return in percent 
 def calc_daily(df): 
     daily_return_df = df.copy()
@@ -85,12 +92,11 @@ def portfolio_returns(market, tickers, weights, daily_returns, rf):
 #Assume that risk free rate is zero (can pull from online) 
 
 
-if __name__ == '__main__':
 
-    stock_df = pd.read_csv('/Users/marksipahimalani/Desktop/Learning-Practice/UdemyPythonMLAppsFinance/stock.csv')
-    stock_df = stock_df.sort_values(by = ['Date'])
-    daily_r = calc_daily(stock_df)
-    portfolio_returns('sp500', ['AMZN', 'AAPL', 'BA', 'T', 'MGM', 'IBM'], 1/6 * np.ones(6), daily_r, 0)
+#stock_df = pd.read_csv('UdemyPythonMLAppsFinance/stock.csv')
+#stock_df = stock_df.sort_values(by = ['Date'])
+#daily_r = calc_daily(stock_df)
+#portfolio_returns('sp500', ['AMZN', 'AAPL', 'BA', 'T', 'MGM', 'IBM'], 1/6 * np.ones(6), daily_r, 0)
 
     #ER_stock('sp500', 'AAPL', daily_r, 0)
     #print(daily_r)
