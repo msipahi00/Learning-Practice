@@ -1,0 +1,24 @@
+/* Write your code here: */
+
+/* grouping more than one selector */
+h1, h2 {
+    color:blueviolet;
+}
+/* child rule, left is the parent (only one gen)*/
+.box > p {
+    color:firebrick;
+}
+/* descendant rule, left is the parent*/
+.list li{
+    color:blue;
+}
+
+/*chaining selector rule*/
+li.done {
+    color:seagreen;
+}
+
+/*combining selector rule (unordered list with descendant paragraph having class done*/
+ul p.done{
+    font-size:0.5em;
+}
