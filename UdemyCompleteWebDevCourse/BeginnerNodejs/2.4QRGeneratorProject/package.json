@@ -1,0 +1,16 @@
+{
+  "name": "qr-generator-project",
+  "version": "1.0.0",
+  "description": "'turns user input into a qr code'",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Mark Sipahimalani",
+  "license": "ISC",
+  "dependencies": {
+    "inquirer": "^9.2.6",
+    "qr-image": "^3.2.0"
+  }
+}
