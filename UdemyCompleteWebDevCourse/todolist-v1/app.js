@@ -2,16 +2,18 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const date = require(__dirname + "/date.js");
+const _ = require("lodash");
 
 const mongoose = require("mongoose");
 
-mongoose.connect('mongodb://127.0.0.1:27017/toDoListDB')
+mongoose.connect('mongodb+srv://admin-mark:Test123@cluster0.jubfqy0.mongodb.net/toDoListDB')
 .then( upd => {
   console.log("MongoDatabase has been created");
 })
 .catch (err => {
   console.log(err);
 })
+
 
 
 const currentDate = date.getDate();
@@ -52,8 +54,8 @@ app.set("view engine", "ejs");
 
 
 
-app.listen(3000, function() {
-  console.log("the server is running on port 3000");
+app.listen(3000 || process.env.PORT, function() {
+  console.log("Server is running successfully.");
 });
 
 
@@ -86,14 +88,14 @@ app.get("/", function(req, res) {
 
 
 app.get("/:customListName", function(req, res) {
-  var customListName = req.params.customListName;
+  var customListName = _.capitalize(req.params.customListName);
   List.findOne({name:customListName})
   .then(upd => {
     if (upd){
       console.log("exists");
       //show an existing list
       res.render("list", {
-        listTitle:"To Do List",
+        listTitle:"To Do List: " + customListName,
         currentDate:currentDate,
         newListItems:upd.items
       });
@@ -120,24 +122,63 @@ app.get("/:customListName", function(req, res) {
 
 app.post("/", function(req, res) {
 
+  const listName = req.body.list; 
+  console.log(listName);
+
   const newItem = new Item({
     name: req.body.newItem
   });
-  newItem.save();
 
-  res.redirect("/");
+  if (listName == "To Do List: "){
+    res.redirect("/")
+    newItem.save(); 
+  }
+  else{ 
+
+    let dbName = listName.split(': ')[1];
+    console.log(dbName);
+    List.findOne({name:dbName})
+    .then(foundList => { 
+      foundList.items.push(newItem);
+      foundList.save();
+      res.redirect("/" + dbName);
+    })
+    .catch(err => { 
+      console.log(err);
+    });
+  }
+
 
 });
 
 app.post("/delete", function(req, res) { 
-  Item.deleteOne({_id:req.body.checkbox})
-  .then( upd => {
-    res.redirect("/");
-    console.log("deleted successfully");
-  })
-  .catch(err => { 
-    console.log(err);
-  })
+  const listName = req.body.listName; 
+  const dbName = listName.split(": ")[1];
+
+  if (listName == "To Do List: ") { 
+    Item.deleteOne({_id:req.body.checkbox})
+    .then( upd => {
+      res.redirect("/");
+      console.log("deleted successfully");
+    })
+    .catch(err => { 
+      console.log(err);
+    })
+  }
+  else { 
+    let conditions = {name: dbName};
+    let updates = {$pull: {items: {_id:req.body.checkbox}}};
+    List.findOneAndUpdate(conditions, updates)
+    .then(out => { 
+      console.log("Deleting and redirecting");
+      res.redirect("/" + dbName);
+    })
+    .catch(err => { 
+      console.log(err);
+    })
+  }
+
+  
 
 })
 
